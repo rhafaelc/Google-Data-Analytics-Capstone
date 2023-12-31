@@ -283,7 +283,7 @@ ggplot(data=temp, aes(x=hsize, y=val, fill=member_casual)) +
 ```
 Takeaway:
 
-- 64.5% of number of rides are from member rider, while 35.5% ar from casual rider.
+- 64.5% of number of rides are from member rider, while 35.5% are from casual rider.
 
 ### Number of Rides by Day
 ```{r warning=FALSE}
