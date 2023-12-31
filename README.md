@@ -1,5 +1,16 @@
 # Google Data Analytics Case study: How does a bike-share navigate speedy success?
 
+This is my capstone project for Google's Data Analytics Professional Certificate.
+
+Tools used:
+- R
+
+Install package
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
 # Table of Contents
 
 1. [Introduction](#introduction)
@@ -52,18 +63,76 @@ There are 12 files following the name template of "*yyyymm-divvy-tripdata*". All
 | ended_at      | end_station_id     | end_lng   |               |
 
 ## 3) Process
+The data are uploaded in R and combined using `bind_rows` from `dplyr` library in R.
+```{r upload data, message=FALSE, warning=FALSE}
+
+df_202212 <- read_csv("divvy-tripdata/202212-divvy-tripdata.csv")
+df_202301 <- read_csv("divvy-tripdata/202301-divvy-tripdata.csv")
+df_202302 <- read_csv("divvy-tripdata/202302-divvy-tripdata.csv")
+df_202303 <- read_csv("divvy-tripdata/202303-divvy-tripdata.csv")
+df_202304 <- read_csv("divvy-tripdata/202304-divvy-tripdata.csv")
+df_202305 <- read_csv("divvy-tripdata/202305-divvy-tripdata.csv")
+df_202306 <- read_csv("divvy-tripdata/202306-divvy-tripdata.csv")
+df_202307 <- read_csv("divvy-tripdata/202307-divvy-tripdata.csv")
+df_202308 <- read_csv("divvy-tripdata/202308-divvy-tripdata.csv")
+df_202309 <- read_csv("divvy-tripdata/202309-divvy-tripdata.csv")
+df_202310 <- read_csv("divvy-tripdata/202310-divvy-tripdata.csv")
+df_202311 <- read_csv("divvy-tripdata/202311-divvy-tripdata.csv")
+```
+```{r combine data}
+df <- bind_rows(df_202212,
+                df_202301,
+                df_202302,
+                df_202303,
+                df_202304,
+                df_202305,
+                df_202306,
+                df_202307,
+                df_202308,
+                df_202309,
+                df_202310,
+                df_202311)
+```
+
 #### Add `ride_length` and `day_of_week` columns
 
 We need to add some columns for further analysis, 
 
 - `ride_length` = `started_at` - `ended_at`
 - `day_of_week` = extract day of week from `started_at` (1 = Sunday)
+- 
+```{r}
+df <- mutate(df, 
+            ride_length = difftime(ended_at, started_at, units = "secs"),
+            day_of_week = wday(df$started_at))
+glimpse(df)
+```
 
 ## 4) Analyze
-The data are uploaded in R and combined using `bind_rows` from `dplyr` library in R. The combined data has 5,677,610 data rows and 15 columns.
+```{r}
+glimpse(df)
+```
+The combined data has 5,677,610 data rows and 15 columns.
 
+### Data Cleaning
+We need to check if there are any duplicate data and missing values. 
+```{r}
+df[duplicated(df$ride_id),]
+```
+There are no duplicated ride_id, hence there are no duplicated row.
+
+
+```{r}
+sum(is.na(df))
+```
 However, the data has 3,597,481 missing values.
-
+```{r}
+missing_val <- sapply(df, function(col) sum(is.na(col)))
+miss_val <- data.frame(
+  missing_values = missing_val
+)
+miss_val
+```
 - 869,289 missing values at `start_station_name` column
 - 869,421 missing values at `start_station_id` column
 - 922,436 missing values at `end_station_name` column
@@ -78,13 +147,37 @@ We need to check how many rows with missing values at
 - `end_lat` and `end_lng`
 
 to see if imputing the missing values is necessary or not.
+```{r message=FALSE}
+nrow(filter(df, 
+            is.na(start_station_name),
+            is.na(start_station_id)))
 
+nrow(filter(df, 
+            is.na(end_station_name),
+            is.na(end_station_id)))
+```
 Seems like for every missing values at `station_name`, the `station_id` is also missing. The number of rows where `station_id` has missing values, but have values at `station_name` is also small (~136.5).
-
+```{r message=FALSE}
+nrow(filter(df, 
+            !is.na(start_station_name),
+            is.na(start_station_id)))
+nrow(filter(df, 
+            !is.na(end_station_name),
+            is.na(end_station_id)))
+```
 Every missing values at `end_lat` also have missing values at `end_lng`, so it is not missing at random.
-
+```{r message=FALSE}
+nrow(filter(df, 
+            is.na(end_lat),
+            is.na(end_lng)))
+```
 We can check if the `end_lat` and `end_lang` can be imputed using `end_station_name`. Imputing `end_lat` and `end_lng` is not necessary because the number of rows where they have `end_station_name` is small (116).
-
+```{r message=FALSE}
+nrow(filter(df, 
+            is.na(end_lat),
+            is.na(end_lng),
+            !is.na(end_station_name)))
+```
 So, imputing missing values is not necessary and can be dropped because most of the missing values cannot be imputed using another feature.
 
 #### Remove rows containing NA
@@ -138,19 +231,22 @@ df_cleaned %>%
 ## 5) Share
 
 ### Distribution of Member and Casual rider in Cyclistic
-!!
+![member_casual_dist](visualizations/distribution-member-casual-cyclistic.jpg)
+
 Takeaway:
 
 - 64.5% of number of rides are from member rider, while 35.5% are from casual rider.
 
 ### Number of Rides by Day
-!!
+![num_of_rides_day](visualizations/num-of-rides-by-day.jpg)
+
 Takeaway:
 
 - Casual rider use the bike-share mostly on the weekend, while member rider on the weekday.
 
 ### Average Ride Duration by Day
-!!
+![avg_ride_duration](visualizations/avg-ride-duration-by-day.jpg)
+
 Takeaway:
 
 - Casual rider have longer average ride duration than member rider in Cyclistic.
@@ -158,7 +254,8 @@ Takeaway:
 - Member rider average ride duration is stagnant on the weekday and higher on the weekend.
 
 ### Distribution of Rideable Type in Cyclistic
-!!
+![member_casual_dist](visualizations/distribution-rideable-type-cyclistic.jpg)
+
 Takeaway:
 
 - The docked bike type has not been used by the member rider.
