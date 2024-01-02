@@ -32,12 +32,12 @@ As a junior data analyst working on the marketing analyst team at Cyclistic, a b
 # 3. Data Analysis
 This case study will be using the 6 stages of the data analysis process:
 
-1. [Ask](#ask)
-2. [Prepare](#prepare)
-3. [Process](#process)
-4. [Analyze](#analyze)
-5. [Share](#share)
-6. [Act](#act)
+1. [Ask](#1-ask)
+2. [Prepare](#2-prepare)
+3. [Process](#3-process)
+4. [Analyze](#4-analyze)
+5. [Share](#5-share)
+6. [Act](#6-act)
 
 ## 1) Ask
 Three questions will guide the future marketing program:
