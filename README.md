@@ -13,15 +13,15 @@ library(tidyverse)
 
 # Table of Contents
 
-1. [Introduction](#introduction)
-2. [Scenario](#scenario)
-3. [Data Analysis](#data-analysis)
-    1) [Ask](#ask)
-    2) [Prepare](#prepare)
-    3) [Process](#process)
-    4) [Analyze](#analyze)
-    5) [Share](#share)
-    6) [Act](#act)
+1. [Introduction](#1-introduction)
+2. [Scenario](#2-scenario)
+3. [Data Analysis](#3-data-analysis)
+    1) [Ask](#1-ask)
+    2) [Prepare](#2-prepare)
+    3) [Process](#3-process)
+    4) [Analyze](#4-analyze)
+    5) [Share](#5-share)
+    6) [Act](#6-act)
 
 # 1. Introduction
 This is a case study for completing [Google Data Analytics Professional Certificate](https://www.coursera.org/professional-certificates/google-data-analytics). In this case study, you work for a fictional company, Cyclistic. Design marketing strategies aimed at converting casual riders into annual members. In order to do that, however, the team needs to better understand how annual members and casual riders differ, why casual riders would buy a membership, and how digital media could affect their marketing tactics. 
